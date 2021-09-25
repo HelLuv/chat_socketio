@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import socket from "../services/socket";
 import axios from "axios";
 
 const JoinBlock = ({onLogin}) => {
@@ -12,7 +11,8 @@ const JoinBlock = ({onLogin}) => {
             return alert('Invalid data entered')
         }
         const obj = {
-            roomId, userName
+            roomId,
+            userName,
         };
         setIsLoading(true);
         await axios.post('/rooms', obj);
