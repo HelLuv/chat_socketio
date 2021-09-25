@@ -13,14 +13,29 @@ const io = new Server(server, {
     }
 });
 
+app.use(express.json());
 
 const PORT = 5000;
 
 const rooms = new Map();
 
 app.get('/rooms', (req, res) => {
-    rooms.set('hello', 'ok');
+
     res.json(rooms);
+});
+
+app.post('/rooms', (req, res) => {
+    const {roomId, userName} = req.body;
+    if (!rooms.has(roomId)) {
+        rooms.set(
+            roomId,
+            new Map([
+                ['users', new Map()],
+                ['messages', []],
+            ]),
+        );
+    }
+    res.send();
 });
 
 io.on('connection', socket => {
