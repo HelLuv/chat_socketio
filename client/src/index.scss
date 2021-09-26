@@ -162,6 +162,9 @@
     resize: none;
     border-radius: 0.5rem;
     border: 2px solid #c9c9d5;
+      &:focus {
+      border: 2px solid #a3a3ae;
+    }
   }
 }
 
