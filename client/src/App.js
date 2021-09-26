@@ -36,10 +36,11 @@ function App() {
         });
     };
 
-    const addMessage = (message) => {
+    const addMessage = (message, time) => {
         dispatch({
             type: 'NEW_MESSAGE',
             payload: message,
+            time
         });
     };
 

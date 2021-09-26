@@ -26,7 +26,7 @@ app.get('/rooms/:id', (req, res) => {
             users: [...rooms.get(roomId).get('users').values()],
             messages: [...rooms.get(roomId).get('messages').values()]
         }
-        : {users: [], messages: []};
+        : {users: [], messages: [],};
     res.json(obj);
 });
 
@@ -52,20 +52,11 @@ io.on('connection', (socket) => {
         socket.broadcast.to(roomId).emit('ROOM:SET_USERS', users);
     });
 
-    socket.on('ROOM:NEW_MESSAGE', ({roomId, userName, text}) => {
+    socket.on('ROOM:NEW_MESSAGE', ({roomId, userName, text, time}) => {
         const obj = {
             userName,
             text,
-        }
-        rooms.get(roomId).get('users').set(socket.id, userName);
-        const users = [...rooms.get(roomId).get('users').values()];
-        socket.broadcast.to(roomId).emit('ROOM:NEW_MESSAGE', users);
-    });
-
-    socket.on('ROOM:NEW_MESSAGE', ({roomId, userName, text}) => {
-        const obj = {
-            userName,
-            text,
+            time
         };
         rooms.get(roomId).get('messages').push(obj);
         socket.broadcast.to(roomId).emit('ROOM:NEW_MESSAGE', obj);

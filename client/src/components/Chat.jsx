@@ -1,23 +1,34 @@
 import React from 'react';
 import socket from "../services/socket";
 
-const Chat = ({users, messages, userName, roomId, onAddMessage}) => {
+const Chat = ({users, messages, userName, time, roomId, onAddMessage}) => {
     const [messageValue, setMessageValue] = React.useState('');
     const messagesRef = React.useRef(null);
+
+    const formatTime = () => {
+        const hours = new Date().getHours();
+        const minutes = new Date().getMinutes();
+        const formHours = hours < 10 ? `0${hours}` : hours;
+        const formMin = minutes < 10 ? `0${minutes}` : minutes;
+
+        return `${formHours}:${formMin}`;
+    };
 
     const onSendMessage = () => {
         socket.emit('ROOM:NEW_MESSAGE', {
             userName,
             roomId,
             text: messageValue,
+            time: formatTime()
         });
-        onAddMessage({userName, text: messageValue});
+        onAddMessage({userName, text: messageValue, time: formatTime()});
         setMessageValue('');
     };
 
     React.useEffect(() => {
         messagesRef.current.scrollTo(0, 99999);
     }, [messages]);
+
 
     return (
         <div className={`chat`}>
@@ -37,7 +48,7 @@ const Chat = ({users, messages, userName, roomId, onAddMessage}) => {
                         <div className="message">
                             <p>{message.text}</p>
                             <div>
-                                <span>{message.userName}</span>
+                                <span>{message.userName} {message.time}</span>
                             </div>
                         </div>
                     ))}
